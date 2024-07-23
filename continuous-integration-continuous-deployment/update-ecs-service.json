@@ -17,7 +17,7 @@
   },
   "loadBalancers": [
     {
-      "targetGroupArn": "arn:aws:elasticloadbalancing:us-east-1:905418280053:targetgroup/marketvector-tg/0fed14076e40cf96",
+      "targetGroupArn": "arn:aws:elasticloadbalancing:us-east-1:905418280053:targetgroup/marketvector-tg/edefe8ae52ba6c40",
       "containerName": "marketvector-app",
       "containerPort": 80
     }
