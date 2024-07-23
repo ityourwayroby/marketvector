@@ -1,0 +1,40 @@
+CICD EXPLAINED
+This Jenkins CI/CD pipeline builds, pushes, and deploys a Docker image to Amazon ECS environment. Here’s a breakdown of the steps and their functions:
+
+STEP 1. Clean Workspace
+- Purpose: Cleans the Jenkins workspace to ensure that no residual files from previous builds are left behind.
+
+STEP 2. Clone GitHub Repo
+-Purpose: Checks out the source code from a GitHub repository.
+- Function: Uses the `git` command to clone the specified branch from the given repository URL into the workspace.
+
+STEP 3. Building Docker Image
+- Purpose: Creates a Docker image from the source code.
+- Function: Uses `docker build` to create a Docker image tagged as `marketvector-html-image`.
+
+STEP 4. Push To ECR
+- Purpose: Pushes the built Docker image to AWS Elastic Container Registry (ECR).
+- Function: Logs into ECR using AWS credentials, tags the Docker image with the ECR repository URI and version, and then pushes the image to ECR.
+
+STEP 5. Update Task Definition
+- Purpose: Updates the ECS task definition to use the new Docker image version.
+- Function: Reads the ECS task definition json file, replaces the old Docker image reference with the new one, and writes the updated json back to the file.
+
+STEP 6. Register Task Definition
+- Purpose: Registers the updated task definition with ECS.
+- Function: Uses the aws cli to register the new task definition and captures its arn. It Updates the ECS service creation and update json files with the new task definition arn.
+
+STEP 7. Stop all Running Tasks
+- Purpose: Stops all running ECS tasks for the service to ensure that the new version can be deployed.
+- Function: Checks if the service exists. If it does, lists and stops all running tasks for that service.
+
+STEP 8. Wait for Tasks to Stop
+- Purpose: Waits for all ECS tasks to stop running before proceeding with deployment.
+- Function: Checks periodically if there are any running tasks for the service. Uses a timeout to limit how long it waits.
+
+STEP 9. Check and Update ECS Service
+- Purpose: Creates or updates the ECS service based on whether it already exists.
+- Function: Checks if the ECS service exists. If not, it creates the service using the specified json file; if it does exist, it updates the existing service to use the new task definition.
+
+
+
