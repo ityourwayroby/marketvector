@@ -2,7 +2,7 @@ pipeline {
     agent any
     parameters {
         string(name: 'BRANCH', defaultValue: 'main', description: 'Branch to build from')
-        string(name: 'REPO_URL', defaultValue: 'https://github.com/essiendaniel2013/marketvector.git', description: 'Repository URL to build from')
+        string(name: 'REPO_URL', defaultValue: 'https://github.com/ityourwayroby/marketvector.git', description: 'Repository URL to build from')
         string(name: 'VERSION', defaultValue: "V00${BUILD_ID}", description: 'Version of Docker image to be built, e.g., V001')
         string(name: 'TASK_DEF_JSON', defaultValue: 'continuous-integration-continuous-deployment/task-def.json', description: 'Path to the task definition JSON file')
         string(name: 'CREATE_SERVICE_FILE', defaultValue: 'continuous-integration-continuous-deployment/create-ecs-service.json', description: 'Path to the create service JSON file')
