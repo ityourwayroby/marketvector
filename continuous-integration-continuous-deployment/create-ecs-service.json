@@ -12,14 +12,14 @@
         "subnet-04e7a2e028dcb65ea"
       ],
       "securityGroups": [
-        "sg-01b91c4e9cc261b1d"
+        "sg-0960af76676dd50ff"
       ],
       "assignPublicIp": "ENABLED"
     }
   },
   "loadBalancers": [
     {
-      "targetGroupArn": "arn:aws:elasticloadbalancing:us-east-1:905418280053:targetgroup/marketvector-tg/edefe8ae52ba6c40",
+      "targetGroupArn": "arn:aws:elasticloadbalancing:us-east-1:905418280053:targetgroup/marketvector-tg/5e5c6e8c7cd7d2e6",
       "containerName": "marketvector-app",
       "containerPort": 80
     }
