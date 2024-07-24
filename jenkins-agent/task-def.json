@@ -1,0 +1,45 @@
+{
+  "family": "jenkins-agent",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "1024",
+  "memory": "2048",
+  "executionRoleArn": "arn:aws:iam::905418280053:role/ecsTaskExecutionRole",
+  "taskRoleArn": "arn:aws:iam::905418280053:role/ecsTaskExecutionRole",
+  "containerDefinitions": [
+    {
+      "name": "jenkins-agent",
+      "image": "your-dockerhub-username/jenkins-agent-full:latest", // Change this to your actual image
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 50000,
+          "hostPort": 50000,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        {
+          "name": "JENKINS_URL",
+          "value": "http://your-jenkins-master-url"
+        },
+        {
+          "name": "JENKINS_AGENT_NAME",
+          "value": "jenkins-agent"
+        },
+        {
+          "name": "JENKINS_SECRET",
+          "value": "your-jenkins-secret"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/jenkins-agent",
+          "awslogs-region": "us-east-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    }
+  ]
+}
