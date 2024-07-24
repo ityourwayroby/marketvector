@@ -1,1 +1,31 @@
-c
+{
+  "cluster": "marketvector-ecs-cluster",
+  "serviceName": "jenkins-agent-service", // Change service name to something more descriptive
+  "taskDefinition": "arn:aws:ecs:us-east-1:905418280053:task-definition/jenkins-agent:1", // Update task definition ARN
+  "desiredCount": 2,
+  "launchType": "FARGATE",
+  "platformVersion": "LATEST",
+  "networkConfiguration": {
+    "awsvpcConfiguration": {
+      "subnets": [
+        "subnet-0b355c1e081bfb317",
+        "subnet-04e7a2e028dcb65ea"
+      ],
+      "securityGroups": [
+        "sg-0960af76676dd50ff"
+      ],
+      "assignPublicIp": "ENABLED"
+    }
+  },
+  "loadBalancers": [
+    {
+      "targetGroupArn": "arn:aws:elasticloadbalancing:us-east-1:905418280053:targetgroup/jenkins-agent-tg/5e5c6e8c7cd7d2e6", // Update target group ARN
+      "containerName": "jenkins-agent", // Change container name to match task definition
+      "containerPort": 50000 // Update to match container port in task definition
+    }
+  ],
+  "deploymentConfiguration": {
+    "minimumHealthyPercent": 50,
+    "maximumPercent": 200
+  }
+}
