@@ -1,8 +1,8 @@
 {
   "cluster": "marketvector-ecs-cluster",
-  "serviceName": "jenkins-agent-service", // Change service name to something more descriptive
-  "taskDefinition": "arn:aws:ecs:us-east-1:905418280053:task-definition/jenkins-agent:1", // Update task definition ARN
-  "desiredCount": 2,
+  "serviceName": "jenkins-agent-service",
+  "taskDefinition": "arn:aws:ecs:us-east-1:905418280053:task-definition/jenkins-agent:1",
+  "desiredCount": 0,
   "launchType": "FARGATE",
   "platformVersion": "LATEST",
   "networkConfiguration": {
@@ -19,9 +19,9 @@
   },
   "loadBalancers": [
     {
-      "targetGroupArn": "arn:aws:elasticloadbalancing:us-east-1:905418280053:targetgroup/jenkins-agent-tg/5e5c6e8c7cd7d2e6", // Update target group ARN
-      "containerName": "jenkins-agent", // Change container name to match task definition
-      "containerPort": 50000 // Update to match container port in task definition
+      "targetGroupArn": "arn:aws:elasticloadbalancing:us-east-1:905418280053:targetgroup/marketvector-tg/05ebd826da417b44",
+      "containerName": "jenkins-agent",
+      "containerPort": 50000
     }
   ],
   "deploymentConfiguration": {
