@@ -9,7 +9,7 @@
   "containerDefinitions": [
     {
       "name": "jenkins-agent",
-      "image": "your-dockerhub-username/jenkins-agent-full:latest", // Change this to your actual image
+      "image": "905418280053.dkr.ecr.us-east-1.amazonaws.com/marketvector-app-repo:V001",
       "essential": true,
       "portMappings": [
         {
@@ -21,11 +21,11 @@
       "environment": [
         {
           "name": "JENKINS_URL",
-          "value": "http://your-jenkins-master-url"
+          "value": "http://54.145.85.177:8080"
         },
         {
           "name": "JENKINS_AGENT_NAME",
-          "value": "jenkins-agent"
+          "value": "ecs-agent"
         },
         {
           "name": "JENKINS_SECRET",
