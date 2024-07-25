@@ -1,6 +1,6 @@
 {
   "cluster": "marketvector-ecs-cluster",
-  "serviceName": "jenkins-agent-service", // Update service name for Jenkins agents
+  "serviceName": "jenkins-agent-service",
   "taskDefinition": "arn:aws:ecs:us-east-1:905418280053:task-definition/jenkins-agent:1",
   "desiredCount": 0,
   "networkConfiguration": {
@@ -10,16 +10,16 @@
         "subnet-04e7a2e028dcb65ea"
       ],
       "securityGroups": [
-        "sg-0960af76676dd50ff"
+        "sg-014fe9358bc77e613"
       ],
       "assignPublicIp": "ENABLED"
     }
   },
   "loadBalancers": [
     {
-      "targetGroupArn": "arn:aws:elasticloadbalancing:us-east-1:905418280053:targetgroup/jenkins-agent-tg/5e5c6e8c7cd7d2e6", // Update target group ARN
+      "targetGroupArn": "arn:aws:elasticloadbalancing:us-east-1:905418280053:targetgroup/marketvector-tg/05ebd826da417b44",
       "containerName": "jenkins-agent",
-      "containerPort": 50000 //
+      "containerPort": 50000
     }
   ],
   "deploymentConfiguration": {
