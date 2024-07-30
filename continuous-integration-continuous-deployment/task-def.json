@@ -9,7 +9,7 @@
   "containerDefinitions": [
     {
       "name": "marketvector-app",
-      "image": "905418280053.dkr.ecr.us-east-1.amazonaws.com/marketvector-app-repo:V001",
+      "image": "905418280053.dkr.ecr.us-east-1.amazonaws.com/marketvector-app-repo:V007",
       "essential": true,
       "portMappings": [
         {
