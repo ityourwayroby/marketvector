@@ -94,6 +94,7 @@ pipeline {
             steps {
                 script {
                     {
+                        withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'aws_creds', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                     def serviceExists = sh(script: """
                         aws ecs describe-services --cluster ${ECS_CLUSTER_NAME} --services ${SERVICE_NAME} --query "services[?status=='ACTIVE'].[serviceName]" --output text
                     """, returnStdout: true).trim()
@@ -108,6 +109,7 @@ pipeline {
                     } else {
                         echo "Service ${SERVICE_NAME} does not exist. Skipping stop tasks step."
                     }
+                        }
                     }
                 }
             }
