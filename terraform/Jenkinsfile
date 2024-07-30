@@ -42,7 +42,9 @@ pipeline {
                 script {
                     // Change into the Terraform code directory
                     dir("${WORKSPACE}/terraform") {
-                            sh 'terraform init'              
+                        withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'aws_creds', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                            sh 'terraform init' 
+                        }
                     }
                 }
             }
@@ -52,7 +54,9 @@ pipeline {
             steps {
                 script {
                     dir("${WORKSPACE}/terraform") {
+                        withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'aws_creds', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                             sh 'terraform plan'
+                        }
                      }
                  }
              }
@@ -62,7 +66,9 @@ pipeline {
             steps {
                 script {
                     dir("${WORKSPACE}/terraform") {
+                        withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'aws_creds', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                             sh 'terraform "${TERRAFORM_ACTION}" -auto-approve'
+                           }
                         }
                     }
                 }
