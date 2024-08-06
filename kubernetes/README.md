@@ -1,5 +1,3 @@
-Here's a polished version of your `README.md` with clear instructions and improved formatting:
-
 ```markdown
 # Jenkins and EKS Setup Guide
 
