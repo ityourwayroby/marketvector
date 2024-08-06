@@ -20,6 +20,7 @@ pipeline {
         UPDATE_SERVICE_FILE = "${params.UPDATE_SERVICE_FILE}"
         SERVICE_NAME = "${params.SERVICE_NAME}"
         ECS_CLUSTER_NAME = "${params.ECS_CLUSTER_NAME}"
+        KUBECONFIG = '/home/jenkins/.kube/config'
     }
 
     stages {
@@ -37,20 +38,20 @@ pipeline {
 
         stage('Building Docker Image') {
             steps {
-                sh "docker build -t marketvector-html-image ."
+                sh "docker build -t eks-repo ."
             }
         }
 
         stage('Push To Elastic Container Registry') {
             steps {
                 script {
-                    withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'aws_creds', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                    
                         sh """
                             aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 905418280053.dkr.ecr.us-east-1.amazonaws.com
-                            docker tag marketvector-html-image 905418280053.dkr.ecr.us-east-1.amazonaws.com/marketvector-app-repo:${VERSION}
-                            docker push 905418280053.dkr.ecr.us-east-1.amazonaws.com/marketvector-app-repo:${VERSION}
+                            docker tag eks-repo:latest 905418280053.dkr.ecr.us-east-1.amazonaws.com/eks-repo:${VERSION}
+                            docker push 905418280053.dkr.ecr.us-east-1.amazonaws.com/eks-repo:${VERSION}
                         """
-                    }
+                    
                 }
             }
         }
@@ -62,10 +63,28 @@ pipeline {
                     
                         sh """
                         
-                        echo " deploying to kubernetes cluster "
-                        
+                        echo "Deploying to Kubernetes cluster"
+                        export KUBECONFIG=${KUBECONFIG}
                         kubectl apply -f .
-
+                        
+                        """
+                    }
+                    
+                }
+            }
+        }
+        
+        stage('Get K8S Cluster Services') {
+            steps {
+                script {
+                    dir('kubernetes') {
+                    
+                        sh """
+                        
+                        echo "Deploying to Kubernetes cluster"
+                        export KUBECONFIG=${KUBECONFIG}
+                        kubectl get svc --namespace=oxer-app-dev
+                        
                         """
                     }
                     
