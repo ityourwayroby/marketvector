@@ -1,76 +1,121 @@
-Step 1 : Create your jenkins server, make sure to attach an IAM Role with admin permissions and run this as userdata to install all packages :
+Here's a polished version of your `README.md` with clear instructions and improved formatting:
 
-#!/bin/bash
-# Update packages and install required software
+```markdown
+# Jenkins and EKS Setup Guide
 
-# Installing docker and adding jenkins user to docker group
-sudo yum update -y
-sudo yum install docker -y
-docker --version
-sudo systemctl start docker
-sudo systemctl enable docker
-sudo chmod 770 /var/run/docker.sock
+## Step 1: Set Up Jenkins Server
 
-# Installing terraform
-sudo wget https://releases.hashicorp.com/terraform/1.3.7/terraform_1.3.7_linux_amd64.zip
-sudo unzip terraform_1.3.7_linux_amd64.zip
-sudo mv terraform /usr/local/bin
-terraform -v
+1. **Create a Jenkins Server**:
+   - Attach an IAM role with administrative permissions to the instance.
+   - Use the following `userdata` script to install all necessary packages:
 
-# Installing git
-sudo yum install git -y
-git --version
+   ```bash
+   #!/bin/bash
+   # Update packages and install required software
 
-# Installing aws cli
-sudo curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-sudo unzip awscliv2.zip
-sudo ./aws/install
-aws --version
+   # Install Docker and configure permissions
+   sudo yum update -y
+   sudo yum install docker -y
+   docker --version
+   sudo systemctl start docker
+   sudo systemctl enable docker
+   sudo chmod 770 /var/run/docker.sock
 
-# Install Jenkins- Check documentation: https://www.jenkins.io/doc/tutorials/tutorial-for-installing-jenkins-on-AWS/
-sudo wget -O /etc/yum.repos.d/jenkins.repo \https://pkg.jenkins.io/redhat-stable/jenkins.repo
-sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
-sudo yum upgrade
-sudo yum install java-17-amazon-corretto -y
-sudo yum install jenkins -y
-sudo systemctl start jenkins
-sudo systemctl enable jenkins
-sudo usermod -aG docker jenkins
+   # Install Terraform
+   sudo wget https://releases.hashicorp.com/terraform/1.3.7/terraform_1.3.7_linux_amd64.zip
+   sudo unzip terraform_1.3.7_linux_amd64.zip
+   sudo mv terraform /usr/local/bin
+   terraform -v
 
-# Install eksctl : 
-curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
-sudo mv /tmp/eksctl /usr/local/bin
+   # Install Git
+   sudo yum install git -y
+   git --version
 
-# Install kubectl :
-curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.30.2/2024-07-12/bin/linux/amd64/kubectl
-chmod +x ./kubectl
-mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$HOME/bin:$PATH
-echo 'export PATH=$HOME/bin:$PATH' >> ~/.bashrc
-mkdir -p /home/jenkins/.kube
-cp /root/.kube/config /home/jenkins/.kube/config
-chown jenkins:jenkins /home/jenkins/.kube/config
-sudo mv ./kubectl /usr/local/bin/kubectl
+   # Install AWS CLI
+   sudo curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+   sudo unzip awscliv2.zip
+   sudo ./aws/install
+   aws --version
 
-step 2 : Run the below commands to create your eks cluster : 
+   # Install Jenkins
+   # Check documentation: https://www.jenkins.io/doc/tutorials/tutorial-for-installing-jenkins-on-AWS/
+   sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+   sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+   sudo yum upgrade
+   sudo yum install java-17-amazon-corretto -y
+   sudo yum install jenkins -y
+   sudo systemctl start jenkins
+   sudo systemctl enable jenkins
+   sudo usermod -aG docker jenkins
 
+   # Install eksctl
+   curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+   sudo mv /tmp/eksctl /usr/local/bin
+
+   # Install kubectl
+   curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.30.2/2024-07-12/bin/linux/amd64/kubectl
+   chmod +x ./kubectl
+   mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$HOME/bin:$PATH
+   echo 'export PATH=$HOME/bin:$PATH' >> ~/.bashrc
+   mkdir -p /home/jenkins/.kube
+   cp /root/.kube/config /home/jenkins/.kube/config
+   chown jenkins:jenkins /home/jenkins/.kube/config
+   sudo mv ./kubectl /usr/local/bin/kubectl
+   ```
+
+## Step 2: Create Your EKS Cluster
+
+Run the following command to create your EKS cluster:
+
+```bash
 eksctl create cluster --name demo-eks --region us-east-1 --nodegroup-name my-nodes --node-type t3.small --managed --nodes 2
+```
 
+## Step 3: Clone the Repository
 
-Step 3 : Clone the repository : https://github.com/ityourwayroby/marketvector.git
+Clone the repository that contains the necessary configuration files:
 
-step 4: Edit the Jenkinsfile and yaml files in kubernetes folder accordingly and push to your github repository.
-NOTE : Make sure to check your images repositories (ECR or Dockerhub) to make sure your images exist
+```bash
+git clone https://github.com/ityourwayroby/marketvector.git
+```
 
-Step 5 : Create your desired namespace in your cluster and should match your yaml files
+## Step 4: Configure Jenkins
 
-Step 6 : Access your jenkins user interface and create a job to point it to your jenkinsfile in the kubernetes folder.
+1. **Edit Configuration Files**:
+   - Modify the `Jenkinsfile` and the YAML files in the `kubernetes` folder as needed.
+   - Push the changes to your GitHub repository.
+   - **Note**: Verify that your image repositories (ECR or Docker Hub) contain the necessary images.
 
-step 7 : Run your job
+## Step 5: Create a Namespace in Kubernetes
 
-step 8 : The last stage of the pipeline runs a command to get the services in the required namespace so you can get the loadbalancer DNS nsmae from the console output
+Create a namespace in your EKS cluster that matches the one specified in your YAML files.
 
-Access your application with the loadbalancer DNS Name.
+## Step 6: Set Up Jenkins Job
 
-To destroy your cluster, run command below : 
+1. **Access Jenkins UI**:
+   - Navigate to the Jenkins user interface.
+2. **Create a Job**:
+   - Configure a new Jenkins job to point to your `Jenkinsfile` located in the `kubernetes` folder.
 
+## Step 7: Run the Jenkins Job
+
+Execute the Jenkins job you created to deploy your application.
+
+## Step 8: Retrieve Load Balancer DNS
+
+1. **Check Pipeline Output**:
+   - The final stage of the pipeline will display the services in the required namespace. Look for the load balancer DNS name in the console output.
+
+2. **Access Your Application**:
+   - Use the load balancer DNS name to access your application.
+
+## Cleanup: Destroy Your EKS Cluster
+
+To delete the EKS cluster when no longer needed, run:
+
+```bash
 eksctl delete cluster --name demo-eks --region us-east-1
+```
+```
+
+This version of the `README.md` provides clear, step-by-step instructions with proper formatting and comments. It ensures that each step is easy to follow and understand.
