@@ -115,5 +115,3 @@ To delete the EKS cluster when no longer needed, run:
 eksctl delete cluster --name demo-eks --region us-east-1
 ```
 ```
-
-This version of the `README.md` provides clear, step-by-step instructions with proper formatting and comments. It ensures that each step is easy to follow and understand.
