@@ -4,23 +4,15 @@ pipeline {
         string(name: 'BRANCH', defaultValue: 'master', description: 'Branch to build from')
         string(name: 'REPO_URL', defaultValue: 'https://github.com/ityourwayroby/marketvector.git', description: 'Repository URL to build from')
         string(name: 'VERSION', defaultValue: "V00${BUILD_ID}", description: 'Version of Docker image to be built, e.g., V001')
-        string(name: 'TASK_DEF_JSON', defaultValue: 'continuous-integration-continuous-deployment/task-def.json', description: 'Path to the task definition JSON file')
-        string(name: 'CREATE_SERVICE_FILE', defaultValue: 'continuous-integration-continuous-deployment/create-ecs-service.json', description: 'Path to the create service JSON file')
-        string(name: 'UPDATE_SERVICE_FILE', defaultValue: 'continuous-integration-continuous-deployment/update-ecs-service.json', description: 'Path to the update service JSON file')
-        string(name: 'SERVICE_NAME', defaultValue: 'marketvector-ecs-service', description: 'ECS Service Name')
-        string(name: 'ECS_CLUSTER_NAME', defaultValue: 'marketvector-ecs-cluster', description: 'ECS Cluster Name')
     }
 
     environment {
         BRANCH = "${params.BRANCH}"
         REPO_URL = "${params.REPO_URL}"
         VERSION = "${params.VERSION}"
-        TASK_DEF_JSON = "${params.TASK_DEF_JSON}"
-        CREATE_SERVICE_FILE = "${params.CREATE_SERVICE_FILE}"
-        UPDATE_SERVICE_FILE = "${params.UPDATE_SERVICE_FILE}"
-        SERVICE_NAME = "${params.SERVICE_NAME}"
-        ECS_CLUSTER_NAME = "${params.ECS_CLUSTER_NAME}"
         KUBECONFIG = '/home/jenkins/.kube/config'
+        ECR_REPO_URL = "905418280053.dkr.ecr.us-east-1.amazonaws.com/eks-repo"
+        GIT_CREDENTIALS_ID = 'github_creds' // Ensure this matches your Jenkins credential ID
     }
 
     stages {
@@ -32,7 +24,7 @@ pipeline {
 
         stage('Clone GitHub Repo') {
             steps {
-                git branch: "${BRANCH}", credentialsId: 'github_creds', url: "${REPO_URL}"
+                git branch: "${BRANCH}", credentialsId: GIT_CREDENTIALS_ID, url: "${REPO_URL}"
             }
         }
 
@@ -45,13 +37,25 @@ pipeline {
         stage('Push To Elastic Container Registry') {
             steps {
                 script {
-                    
+                    sh """
+                        aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${ECR_REPO_URL}
+                        docker tag eks-repo:latest ${ECR_REPO_URL}:${VERSION}
+                        docker push ${ECR_REPO_URL}:${VERSION}
+                    """
+                }
+            }
+        }
+
+        stage('Update Kubernetes Deployment') {
+            steps {
+                script {
+                    dir('kubernetes') {
                         sh """
-                            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 905418280053.dkr.ecr.us-east-1.amazonaws.com
-                            docker tag eks-repo:latest 905418280053.dkr.ecr.us-east-1.amazonaws.com/eks-repo:${VERSION}
-                            docker push 905418280053.dkr.ecr.us-east-1.amazonaws.com/eks-repo:${VERSION}
+                            echo "Updating deployment.yaml with the new image version"
+                            sed -i 's|image:.*|image: ${ECR_REPO_URL}:${VERSION}|g' deployment.yaml
+                            cat deployment.yaml # Display the updated file for verification
                         """
-                    
+                    }
                 }
             }
         }
@@ -60,16 +64,12 @@ pipeline {
             steps {
                 script {
                     dir('kubernetes') {
-                    
                         sh """
-                        
-                        echo "Deploying to Kubernetes cluster"
-                        export KUBECONFIG=${KUBECONFIG}
-                        kubectl apply -f .
-                        
+                            echo "Deploying to Kubernetes cluster"
+                            export KUBECONFIG=${KUBECONFIG}
+                            kubectl apply -f deployment.yaml
                         """
                     }
-                    
                 }
             }
         }
@@ -78,16 +78,33 @@ pipeline {
             steps {
                 script {
                     dir('kubernetes') {
-                    
                         sh """
-                        
-                        echo "Deploying to Kubernetes cluster"
-                        export KUBECONFIG=${KUBECONFIG}
-                        kubectl get svc --namespace=oxer-app-dev
-                        
+                            echo "Fetching Kubernetes cluster services"
+                            export KUBECONFIG=${KUBECONFIG}
+                            kubectl get svc --namespace=oxer-app-dev
                         """
                     }
-                    
+                }
+            }
+        }
+        
+        stage('Commit and Push Updated YAML') {
+            steps {
+                script {
+                    dir('kubernetes') {
+                        sh """
+                            git config user.name "Jenkins CI"
+                            git config user.email "jenkins@ci.com"
+
+                            git add deployment.yaml
+                            git commit -m "Update deployment.yaml with image version ${VERSION}"
+                        """
+                        withCredentials([usernamePassword(credentialsId: GIT_CREDENTIALS_ID, passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                            sh """
+                                git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${REPO_URL.replace("https://", "")} ${BRANCH}
+                            """
+                        }
+                    }
                 }
             }
         }
