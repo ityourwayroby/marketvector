@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: oxer-app-container
-        image: 905418280053.dkr.ecr.us-east-1.amazonaws.com/eks-repo:V0011
+        image: 905418280053.dkr.ecr.us-east-1.amazonaws.com/eks-repo:V007
         ports:
         - containerPort: 80
 
