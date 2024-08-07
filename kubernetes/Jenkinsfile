@@ -68,6 +68,7 @@ pipeline {
                             echo "Deploying to Kubernetes cluster"
                             export KUBECONFIG=${KUBECONFIG}
                             kubectl apply -f .
+                            sleep 30
                         """
                     }
                 }
