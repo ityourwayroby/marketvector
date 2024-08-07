@@ -67,7 +67,7 @@ pipeline {
                         sh """
                             echo "Deploying to Kubernetes cluster"
                             export KUBECONFIG=${KUBECONFIG}
-                            kubectl apply -f deployment.yaml
+                            kubectl apply -f .
                         """
                     }
                 }
