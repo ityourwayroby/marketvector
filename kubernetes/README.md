@@ -55,18 +55,23 @@
    chmod +x ./kubectl
    mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$HOME/bin:$PATH
    echo 'export PATH=$HOME/bin:$PATH' >> ~/.bashrc
-   mkdir -p /home/jenkins/.kube
-   cp /root/.kube/config /home/jenkins/.kube/config
-   chown jenkins:jenkins /home/jenkins/.kube/config
    sudo mv ./kubectl /usr/local/bin/kubectl
    ```
 
-## Step 2: Create Your EKS Cluster
+## Step 2: Create Your EKS Cluster and Connect Jenkins User to Cluster
 
 Run the following command to create your EKS cluster:
 
 ```bash
 eksctl create cluster --name demo-eks --region us-east-1 --nodegroup-name my-nodes --node-type t3.small --managed --nodes 2
+```
+
+Run the following command to set Jenkins user to Run Kubectl commands and connect to the Cluster:
+
+```bash
+mkdir -p /home/jenkins/.kube
+cp /root/.kube/config /home/jenkins/.kube/config
+chown jenkins:jenkins /home/jenkins/.kube/config
 ```
 
 ## Step 3: Clone the Repository
