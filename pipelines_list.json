@@ -15,7 +15,7 @@
     {
       "name": "continuous-integration-continuous-deployment",
       "repo": "https://github.com/essiendaniel2013/marketvector.git",
-      "branch": "main",
+      "branch": "main"
       "jenkinsfile": "continuous-integration-continuous-deployment/Jenkinsfile"
     }
   ]
