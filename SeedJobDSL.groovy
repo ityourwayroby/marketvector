@@ -64,10 +64,18 @@ try {
     }
 } catch (JsonException e) {
     println "Error parsing JSON file: ${e.message}"
+    currentBuild.result = 'FAILURE'
+    throw e
 } catch (FileNotFoundException e) {
     println "File error: ${e.message}"
+    currentBuild.result = 'FAILURE'
+    throw e
 } catch (IllegalArgumentException e) {
     println "Configuration error: ${e.message}"
+    currentBuild.result = 'FAILURE'
+    throw e
 } catch (Exception e) {
     println "Unexpected error: ${e.message}"
+    currentBuild.result = 'FAILURE'
+    throw e
 }
