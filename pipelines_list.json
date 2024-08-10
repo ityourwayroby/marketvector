@@ -1,9 +1,22 @@
 {
   "rbac-folders": [
     "springboot-app-project",
-    "oxer-app-project"
+    "oxer-app-project",
+    "java-app-project"
   ],
   "springboot-app-project": [
+    {
+      "name": "infrastructure-provision",
+      "repo": "https://github.com/essiendaniel2013/marketvector.git",
+      "branch": "main",
+      "jenkinsfile": "terraform/Jenkinsfile"
+    },
+    {
+      "name": "infrastructure-provision",
+      "repo": "https://github.com/essiendaniel2013/marketvector.git",
+      "branch": "main",
+      "jenkinsfile": "terraform/Jenkinsfile"
+    },
     {
       "name": "infrastructure-provision",
       "repo": "https://github.com/essiendaniel2013/marketvector.git",
@@ -17,6 +30,50 @@
       "repo": "https://github.com/essiendaniel2013/marketvector.git",
       "branch": "main",
       "jenkinsfile": "continuous-integration-continuous-deployment/Jenkinsfile"
+    },
+    {
+      "name": "infrastructure-provision",
+      "repo": "https://github.com/essiendaniel2013/marketvector.git",
+      "branch": "main",
+      "jenkinsfile": "terraform/Jenkinsfile"
+    },
+    {
+      "name": "infrastructure-provision",
+      "repo": "https://github.com/essiendaniel2013/marketvector.git",
+      "branch": "main",
+      "jenkinsfile": "terraform/Jenkinsfile"
+    },
+    {
+      "name": "infrastructure-provision",
+      "repo": "https://github.com/essiendaniel2013/marketvector.git",
+      "branch": "main",
+      "jenkinsfile": "terraform/Jenkinsfile"
+    }
+  ],
+  "java-app-project": [
+    {
+      "name": "continuous-integration-continuous-deployment",
+      "repo": "https://github.com/essiendaniel2013/marketvector.git",
+      "branch": "main",
+      "jenkinsfile": "continuous-integration-continuous-deployment/Jenkinsfile"
+    },
+    {
+      "name": "infrastructure-provision",
+      "repo": "https://github.com/essiendaniel2013/marketvector.git",
+      "branch": "main",
+      "jenkinsfile": "terraform/Jenkinsfile"
+    },
+    {
+      "name": "infrastructure-provision",
+      "repo": "https://github.com/essiendaniel2013/marketvector.git",
+      "branch": "main",
+      "jenkinsfile": "terraform/Jenkinsfile"
+    },
+    {
+      "name": "infrastructure-provision",
+      "repo": "https://github.com/essiendaniel2013/marketvector.git",
+      "branch": "main",
+      "jenkinsfile": "terraform/Jenkinsfile"
     }
   ]
 }
