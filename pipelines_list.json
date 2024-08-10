@@ -1,9 +1,9 @@
 {
   "rbac-folders": [
-    "folder-1",
-    "folder-2"
+    "springboot-app-project",
+    "oxer-app-project"
   ],
-  "folder-1": [
+  "springboot-app-project": [
     {
       "name": "infrastructure-provision",
       "repo": "https://github.com/essiendaniel2013/marketvector.git",
@@ -11,7 +11,7 @@
       "jenkinsfile": "terraform/Jenkinsfile"
     }
   ],
-  "folder-2": [
+  "oxer-app-project": [
     {
       "name": "continuous-integration-continuous-deployment",
       "repo": "https://github.com/essiendaniel2013/marketvector.git",
