@@ -1,79 +1,94 @@
 {
   "rbac-folders": [
-    "springboot-app-project",
-    "oxer-app-project",
-    "java-app-project"
+    "devops",
+    "developers",
+    "database"
   ],
-  "springboot-app-project": [
+  "devops": [],
+  "devops/devops_dev": [
     {
       "name": "infrastructure-provision",
-      "repo": "https://github.com/essiendaniel2013/marketvector.git",
+      "repo": "https://dessien1@bitbucket.org/marketvectorindexes/payloadcms.git",
       "branch": "main",
       "jenkinsfile": "terraform/Jenkinsfile"
     },
     {
-      "name": "infrastructure-provision",
-      "repo": "https://github.com/essiendaniel2013/marketvector.git",
+      "name": "ci-cd",
+      "repo": "https://dessien1@bitbucket.org/marketvectorindexes/payloadcms.git",
       "branch": "main",
-      "jenkinsfile": "terraform/Jenkinsfile"
-    },
+      "jenkinsfile": "ci-cd/Jenkinsfile"
+    }
+  ],
+  "devops/devops_uat": [
     {
       "name": "infrastructure-provision",
-      "repo": "https://github.com/essiendaniel2013/marketvector.git",
-      "branch": "main",
+      "repo": "https://dessien1@bitbucket.org/marketvectorindexes/payloadcms.git",
+      "branch": "uat",
       "jenkinsfile": "terraform/Jenkinsfile"
     }
   ],
-  "oxer-app-project": [
-    {
-      "name": "continuous-integration-continuous-deployment",
-      "repo": "https://github.com/essiendaniel2013/marketvector.git",
-      "branch": "main",
-      "jenkinsfile": "continuous-integration-continuous-deployment/Jenkinsfile"
-    },
+  "devops/devops_prod": [
     {
       "name": "infrastructure-provision",
-      "repo": "https://github.com/essiendaniel2013/marketvector.git",
-      "branch": "main",
-      "jenkinsfile": "terraform/Jenkinsfile"
-    },
-    {
-      "name": "infrastructure-provision",
-      "repo": "https://github.com/essiendaniel2013/marketvector.git",
-      "branch": "main",
-      "jenkinsfile": "terraform/Jenkinsfile"
-    },
-    {
-      "name": "infrastructure-provision",
-      "repo": "https://github.com/essiendaniel2013/marketvector.git",
-      "branch": "main",
+      "repo": "https://dessien1@bitbucket.org/marketvectorindexes/payloadcms.git",
+      "branch": "prod",
       "jenkinsfile": "terraform/Jenkinsfile"
     }
   ],
-  "java-app-project": [
+  "developers": [],
+  "developers/developers_dev": [
     {
-      "name": "continuous-integration-continuous-deployment",
-      "repo": "https://github.com/essiendaniel2013/marketvector.git",
+      "name": "website",
+      "repo": "https://dessien1@bitbucket.org/marketvectorindexes/payloadcms.git",
       "branch": "main",
-      "jenkinsfile": "continuous-integration-continuous-deployment/Jenkinsfile"
+      "jenkinsfile": "website/Jenkinsfile"
     },
     {
-      "name": "infrastructure-provision",
-      "repo": "https://github.com/essiendaniel2013/marketvector.git",
+      "name": "payloadcms",
+      "repo": "https://dessien1@bitbucket.org/marketvectorindexes/payloadcms.git",
       "branch": "main",
-      "jenkinsfile": "terraform/Jenkinsfile"
-    },
+      "jenkinsfile": "payloadcms/Jenkinsfile"
+    }
+  ],
+  "developers/developers_uat": [
     {
-      "name": "infrastructure-provision",
-      "repo": "https://github.com/essiendaniel2013/marketvector.git",
-      "branch": "main",
-      "jenkinsfile": "terraform/Jenkinsfile"
-    },
+      "name": "website",
+      "repo": "https://dessien1@bitbucket.org/marketvectorindexes/payloadcms.git",
+      "branch": "uat",
+      "jenkinsfile": "website/Jenkinsfile"
+    }
+  ],
+  "developers/developers_prod": [
     {
-      "name": "infrastructure-provision",
-      "repo": "https://github.com/essiendaniel2013/marketvector.git",
+      "name": "website",
+      "repo": "https://dessien1@bitbucket.org/marketvectorindexes/payloadcms.git",
+      "branch": "prod",
+      "jenkinsfile": "website/Jenkinsfile"
+    }
+  ],
+  "database": [],
+  "database/database_dev": [
+    {
+      "name": "eft",
+      "repo": "https://dessien1@bitbucket.org/marketvectorindexes/payloadcms.git",
       "branch": "main",
-      "jenkinsfile": "terraform/Jenkinsfile"
+      "jenkinsfile": "eft/Jenkinsfile"
+    }
+  ],
+  "database/database_uat": [
+    {
+      "name": "eft",
+      "repo": "https://dessien1@bitbucket.org/marketvectorindexes/payloadcms.git",
+      "branch": "uat",
+      "jenkinsfile": "eft/Jenkinsfile"
+    }
+  ],
+  "database/database_prod": [
+    {
+      "name": "eft",
+      "repo": "https://dessien1@bitbucket.org/marketvectorindexes/payloadcms.git",
+      "branch": "prod",
+      "jenkinsfile": "eft/Jenkinsfile"
     }
   ]
 }
