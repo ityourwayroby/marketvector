@@ -20,41 +20,43 @@ try {
 
     // Loop through the folders
     config['rbac-folders'].each { folderName ->
-        if (!config.containsKey(folderName)) {
-            throw new IllegalArgumentException("Folder '${folderName}' is listed in 'rbac-folders' but not defined in JSON.")
-        }
 
         println "Creating RBAC folder: ${folderName}"
-        
-        folder(folderName) // Create a folder for each RBAC group
+        folder(folderName) // Create the parent folder (e.g., devops, developers, etc.)
 
-        // Loop through the projects in each folder and create pipelines
-        config[folderName].each { project ->
-            def pipelineName = project.name
-            def repoUrl = project.repo
-            def branch = project.branch
-            def jenkinsfilePath = project.jenkinsfile
-            def credentialsId = 'github_creds'
+        // Create subfolders within each folder
+        config.keySet().findAll { it.startsWith(folderName + "/") }.each { subfolderName ->
+            println "Creating subfolder: ${subfolderName}"
+            folder(subfolderName) // Create subfolders under parent
 
-            // Validate project structure
-            if (!pipelineName || !repoUrl || !branch || !jenkinsfilePath) {
-                throw new IllegalArgumentException("Project configuration missing required fields in folder '${folderName}'.")
-            }
+            // Loop through the projects in each subfolder and create pipelines
+            config[subfolderName].each { project ->
+                def pipelineName = project.name
+                def repoUrl = project.repo
+                def branch = project.branch
+                def jenkinsfilePath = project.jenkinsfile
+                def credentialsId = 'bitbucket_creds'
 
-            // Create pipeline job inside the folder
-            println "Creating pipeline job: ${folderName}/${pipelineName}"
-            
-            pipelineJob("${folderName}/${pipelineName}") {
-                definition {
-                    cpsScm {
-                        scm {
-                            git {
-                                remote {
-                                    url(repoUrl)
-                                    credentials(credentialsId)
+                // Validate project structure
+                if (!pipelineName || !repoUrl || !branch || !jenkinsfilePath) {
+                    throw new IllegalArgumentException("Project configuration missing required fields in folder '${subfolderName}'.")
+                }
+
+                // Create pipeline job inside the folder
+                println "Creating pipeline job: ${subfolderName}/${pipelineName}"
+                
+                pipelineJob("${subfolderName}/${pipelineName}") {
+                    definition {
+                        cpsScm {
+                            scm {
+                                git {
+                                    remote {
+                                        url(repoUrl)
+                                        credentials(credentialsId)
+                                    }
+                                    branches(branch)
+                                    scriptPath(jenkinsfilePath)
                                 }
-                                branches(branch)
-                                scriptPath(jenkinsfilePath)
                             }
                         }
                     }
