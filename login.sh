@@ -2,10 +2,10 @@
 
 # Database connection parameters
 DB_NAME="test_database"
-DB_USER="postgres"
+DB_USER="root"
 DB_PASS="admin1234"
-DB_HOST="localhost"
-DB_PORT="5432"
+DB_HOST="192.168.56.102"  # IP of the database-server
+DB_PORT="3306"
 
 # Maximum number of attempts
 MAX_ATTEMPTS=3
@@ -27,7 +27,7 @@ while [ $attempt -le $MAX_ATTEMPTS ]; do
     echo
 
     # Authenticate user
-    AUTH_RESULT=$(PGPASSWORD=$DB_PASS psql -h "$DB_HOST" -U "$DB_USER" -d "$DB_NAME" -t -c "
+    AUTH_RESULT=$(mysql -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASS" -D "$DB_NAME" -N -B -e "
     SELECT COUNT(*)
     FROM users
     WHERE email = '$EMAIL' AND password = '$PASSWORD';
