@@ -2,13 +2,13 @@
 
 # Database connection parameters
 DB_NAME="test_database"
-DB_USER="postgres"
+DB_USER="root"
 DB_PASS="admin1234"
-DB_HOST="localhost"
-DB_PORT="5432"
+DB_HOST="192.168.56.102"  # IP of the database-server
+DB_PORT="3306"
 
 # Prompt for user information
-echo "Welcome To ItYourWay"
+echo "Welcome To ItGenius Portal"
 sleep 3
 echo "Click here to Sign Up"
 sleep 3
@@ -51,12 +51,9 @@ echo "Last Name: $LAST_NAME"
 echo "Password: $PASSWORD"
 
 # Insert the user information into the table
-PGPASSWORD=$DB_PASS psql -h "$DB_HOST" -U "$DB_USER" -d "$DB_NAME" -c "
+mysql -h "$DB_HOST" -P "$DB_PORT" -u "$DB_USER" -p"$DB_PASS" -D "$DB_NAME" -e "
 INSERT INTO users (email, first_name, last_name, password)
 VALUES ('$EMAIL', '$FIRST_NAME', '$LAST_NAME', '$PASSWORD');
 " || { echo "Error inserting data"; exit 1; }
 
 echo "Sign up successful!"
-
-# Check the inserted data
-PGPASSWORD=$DB_PASS psql -h "$DB_HOST" -U "$DB_USER" -d "$DB_NAME" -c "SELECT * FROM users;"
